@@ -65,12 +65,11 @@ class User(Client):
             self.friends_id = response['response']['items']
             self.friends_count = response['response']['count']
 
-def main():
+if __name__ == '__main__':
+    C = Client()
     while True:
         input_value = input('Введите идентификатор или имя пользователя: ')
-        C = Client()
         response = C.send_request('users.get', params={'user_ids': input_value})
-        del C
         if 'error' in response:
                 print('Ошибка: "{}".\n'.format(response['error']['error_msg']))
         else:
@@ -87,7 +86,6 @@ def main():
                 user_friend_obj = User(user_friend_id)
                 user_friend_obj.get_groups()
                 target_groups_id -= set(user_friend_obj.groups_id)
-                del user_friend_obj
 
             if len(list(target_groups_id)) > 0:
                 tmp = ', '.join(list(map(str, list(target_groups_id))))
@@ -103,5 +101,3 @@ def main():
                 print('Индивидуальных групп нет!')
 
             break
-
-main()
